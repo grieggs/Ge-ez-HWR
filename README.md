@@ -2,7 +2,7 @@
 ## Quick Start
 1. Install [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 2. Open a terminal (conda terminal in windows), navigate to the Ge-ez-HWR directory, and then run the following depending on your operating system:  
-   Linux: ```conda env create -f environment.yml``` (Recomended)
+   Linux: ```conda env create -f environment.yml``` (Recomended)  
    Windows: ```conda env create -f environment-win.yml```  
    OSX: ```conda env create -f environment-OSX.yml```  
 If you have issues using one of the default environments, or would like to use GPU acceleration, go to section 2 to see detailed instructions for creating your own.
