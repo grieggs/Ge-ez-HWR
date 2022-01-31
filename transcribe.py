@@ -25,15 +25,13 @@ def main():
 
     torch.manual_seed(68)
     torch.backends.cudnn.deterministic = True
-
-    print(torch.LongTensor(10).random_(0, 10))
-
-    config_path = sys.argv[1]
-    print(config_path)
-    RIMES = (config_path.find('rimes') != -1)
-    print(RIMES)
+    try:
+        config_path = sys.argv[1]
+    except IndexError as e:
+        config_path = "config_transcribe.json"
     with open(config_path) as f:
         config = json.load(f)
+
 
     with open(config_path) as f:
         paramList = f.readlines()
@@ -45,33 +43,29 @@ def main():
 
 
     idx_to_char, char_to_idx = character_set.load_char_set(config['character_set_path'])
-    print(idx_to_char)
     val_dataset = TsDataset(char_to_idx, img_height=config['network']['input_height'], root_path=config['image_root_directory'])
 
     val_dataloader = DataLoader(val_dataset, batch_size=config['batch_size'], shuffle=False, num_workers=1,
                                  collate_fn=ts_dataset.collate)
+
     hw = crnn.create_model({
         'input_height': config['network']['input_height'],
         'cnn_out_size': config['network']['cnn_out_size'],
         'num_of_channels': 3,
         'num_of_outputs': len(idx_to_char) + 1
     })
-    state_dict = torch.load(config['model_load_path'])
-    hw.load_state_dict(state_dict)
-
     if torch.cuda.is_available():
+        state_dict = torch.load(config['model_load_path'])
+        hw.load_state_dict(state_dict)
         hw.cuda()
         dtype = torch.cuda.FloatTensor
         print("Using GPU")
     else:
+        state_dict = torch.load(config['model_load_path'],map_location=torch.device('cpu') )
+        hw.load_state_dict(state_dict)
         dtype = torch.FloatTensor
         print("No GPU detected")
     output = {}
-    tot_ce = 0.0
-    tot_we = 0.0
-    sum_loss = 0.0
-    sum_wer = 0.0
-    steps = 0.0
     hw.eval()
     for x in tqdm(val_dataloader, total=len(val_dataloader)):
         if x is None:
@@ -86,7 +80,7 @@ def main():
                 pred, raw_pred = string_utils.naive_decode(logits)
                 pred_str = string_utils.label2str(pred, idx_to_char, False)
                 output[os.path.basename(image_path)] = pred_str
-                steps += 1
+
 
     for x in output:
         print(x +": " + output[x])
@@ -98,8 +92,6 @@ def main():
         dict_writer.writeheader()
         for x in output:
             dict_writer.writerow({'image': x, 'transcription': output[x]})
-
-    hw.eval()
 
 if __name__ == "__main__":
     main()

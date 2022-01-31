@@ -1,0 +1,12 @@
+{
+    "image_root_directory": "images/",
+    "network": {
+        "input_height": 128,
+        "cnn_out_size": 1024,
+        "learning_rate": 0.01,
+        "bridge_width": 5
+    },
+    "model_load_path": "models/model1.pt",
+    "character_set_path": "charset.json",
+    "batch_size": 1
+}
