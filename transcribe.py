@@ -92,6 +92,6 @@ def main():
         dict_writer.writeheader()
         for x in output:
             dict_writer.writerow({'image': x, 'transcription': output[x]})
-
+    print("Predictions saved to: " + str(out))
 if __name__ == "__main__":
     main()
