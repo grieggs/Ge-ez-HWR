@@ -49,7 +49,7 @@ class TsDataset(Dataset):
         self.char_to_idx = char_to_idx
         self.data = sorted(glob.glob(os.path.join(root_path,"*")))
         #remove text files
-        self.data = [num for num in self.data if num[-3:] != 'txt' and num[-3:] != 'tsv']
+        self.data = [num for num in self.data if num[-3:] != 'txt' and num[-3:] != 'csv']
 
 
     def __len__(self):
