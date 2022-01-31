@@ -85,7 +85,7 @@ def main():
     for x in output:
         print(x +": " + output[x])
     out = os.path.join(config['image_root_directory'],'out.csv')
-    print(out)
+
     with open(out, 'w') as f:
         field_names = ['image','transcription']
         dict_writer = csv.DictWriter(f, fieldnames=field_names)
