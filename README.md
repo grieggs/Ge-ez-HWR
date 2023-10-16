@@ -22,3 +22,5 @@ If the default environment.yml files don't work for you, enter the following com
 4. ```pip install editdistance```
 5. ```conda install tqdm```
 6. From here  you should be able to return to step 4 of the quick start guide.
+
+If you have any trouble with this software, feel free to reach out to me at sgrieggs@iup.edu
